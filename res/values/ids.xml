@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="header" />
+    <item type="id" name="header_text" />
+    <item type="id" name="footer" />
+    <item type="id" name="button_about" />
+    <item type="id" name="button_launch" />
+    <item type="id" name="body" />
+    <item type="id" name="edit_cmdline" />
+    <item type="id" name="spinner_games" />
+    <item type="id" name="layout" />
+    <item type="id" name="image" />
+    <item type="id" name="title" />
+    <item type="id" name="text" />
+</resources>

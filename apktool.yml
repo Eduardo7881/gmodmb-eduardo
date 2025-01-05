@@ -1,0 +1,24 @@
+!!brut.androlib.apk.ApkInfo
+apkFileName: cstrike-1.09_96.apk
+doNotCompress:
+- resources.arsc
+- png
+isFrameworkApk: false
+packageInfo:
+  forcedPackageId: '127'
+  renameManifestPackage: null
+resourcesAreCompressed: false
+sdkInfo:
+  minSdkVersion: '17'
+  targetSdkVersion: '24'
+sharedLibrary: false
+sparseResources: true
+unknownFiles: {}
+usesFramework:
+  ids:
+  - 1
+  tag: null
+version: 2.8.1
+versionInfo:
+  versionCode: '1'
+  versionName: '1.09'
