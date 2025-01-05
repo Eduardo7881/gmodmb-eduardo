@@ -15,24 +15,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Instalar dependências
-    - name: Install dependencies
+    # Instalar dependências e configurar Android SDK
+    - name: Install dependencies and Android SDK
       run: |
         sudo apt-get update
         sudo apt-get install -y openjdk-11-jdk wget zip unzip
-        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O cmdline-tools.zip
-        unzip cmdline-tools.zip -d $HOME/android-sdk
-        mkdir -p $HOME/android-sdk/cmdline-tools/latest
-        mv $HOME/android-sdk/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest
+        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
+        mkdir -p $HOME/android-sdk/cmdline-tools
+        unzip cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
+        mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
         export ANDROID_HOME=$HOME/android-sdk
         export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-        sdkmanager --licenses
+        yes | sdkmanager --licenses
         sdkmanager "platform-tools" "platforms;android-30" "build-tools;33.0.0"
 
     # Compilar o projeto
     - name: Compile project
       run: |
         # Criar classes.dex com d8
+        mkdir -p out/dex/
         d8 --output out/dex/ out/compiled_classes/**/*.class
         # Empacotar APK com apktool
         apktool b cstrike_src -o cstrike_unsigned.apk
