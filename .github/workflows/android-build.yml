@@ -1,0 +1,47 @@
+name: Manual Android Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout o código do repositório
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Instalar dependências
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openjdk-11-jdk wget zip unzip
+        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O cmdline-tools.zip
+        unzip cmdline-tools.zip -d $HOME/android-sdk
+        mkdir -p $HOME/android-sdk/cmdline-tools/latest
+        mv $HOME/android-sdk/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest
+        export ANDROID_HOME=$HOME/android-sdk
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
+        sdkmanager --licenses
+        sdkmanager "platform-tools" "platforms;android-30" "build-tools;33.0.0"
+
+    # Compilar o projeto
+    - name: Compile project
+      run: |
+        # Criar classes.dex com d8
+        d8 --output out/dex/ out/compiled_classes/**/*.class
+        # Empacotar APK com apktool
+        apktool b cstrike_src -o cstrike_unsigned.apk
+        # Assinar o APK com apksigner
+        apksigner sign --ks my-release-key.jks --ks-key-alias my-key-alias --ks-pass pass:whyareyouhere --key-pass pass:nopee11 --out cstrike_signed.apk cstrike_unsigned.apk
+
+    # Fazer upload do APK assinado como artefato
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: cstrike-signed-apk
+        path: cstrike_signed.apk
