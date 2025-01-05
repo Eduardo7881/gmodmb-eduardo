@@ -32,6 +32,8 @@ jobs:
     # Compilar o projeto
     - name: Compile project
       run: |
+        # Adicionar Build Tools ao PATH
+        export PATH=$ANDROID_HOME/build-tools/33.0.0:$PATH
         # Criar classes.dex com d8
         mkdir -p out/dex/
         d8 --output out/dex/ out/compiled_classes/**/*.class
